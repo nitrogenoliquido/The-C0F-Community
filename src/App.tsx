@@ -95,6 +95,7 @@ function Navbar() {
 }
 
 function SystemGuard({ children }: { children: React.ReactNode }) {
+    console.log("SystemGuard v2 initialized - Hook Fix Applied");
     const [status, setStatus] = useState<'CHECKING' | 'ONLINE' | 'OFFLINE'>('CHECKING');
 
     useEffect(() => {
