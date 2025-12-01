@@ -13,20 +13,23 @@
     "deploy": "npx gh-pages -d dist"
   },
   "dependencies": {
+    "axios": "^1.6.2",
+    "otplib": "^12.0.1",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "axios": "^1.6.2",
-    "qrcode.react": "^3.1.0",
-    "otplib": "^12.0.1"
+    "react-router-dom": "^6.20.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0",
+    "autoprefixer": "^10.4.22",
     "javascript-obfuscator": "^4.1.0",
-    "rollup-plugin-javascript-obfuscator": "^1.0.4"
+    "postcss": "^8.5.6",
+    "rollup-plugin-javascript-obfuscator": "^1.0.4",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0"
   }
 }

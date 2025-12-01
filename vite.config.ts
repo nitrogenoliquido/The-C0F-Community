@@ -4,6 +4,7 @@ import obfuscator from 'rollup-plugin-javascript-obfuscator'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // base: '/The-C0F-Community/',  <-- ELIMINADO para usar dominio raíz
   plugins: [
     react(),
     obfuscator({
