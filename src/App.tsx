@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import CreatePostPage from './pages/CreatePostPage';
 import ThreadPage from './pages/ThreadPage';
 import CategoryPage from './pages/CategoryPage';
+import UserProfilePage from './pages/UserProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Bell, RefreshCw } from 'lucide-react';
@@ -140,6 +141,7 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/create-post" element={<CreatePostPage />} />
                 <Route path="/thread/:postId" element={<ThreadPage />} />
+                <Route path="/user/:username" element={<UserProfilePage />} />
                 <Route path="/category/:categoryName" element={<CategoryPage />} />
                 <Route path="*" element={<NotFoundPage />} />
                 </Routes>
