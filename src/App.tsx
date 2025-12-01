@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import CreatePostPage from './pages/CreatePostPage';
 import ThreadPage from './pages/ThreadPage';
 import CategoryPage from './pages/CategoryPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Bell, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -140,6 +141,7 @@ function App() {
                 <Route path="/create-post" element={<CreatePostPage />} />
                 <Route path="/thread/:postId" element={<ThreadPage />} />
                 <Route path="/category/:categoryName" element={<CategoryPage />} />
+                <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </main>
             </div>
