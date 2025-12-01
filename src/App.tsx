@@ -119,20 +119,71 @@ function SystemGuard({ children }: { children: React.ReactNode }) {
 
     if (status === 'OFFLINE') {
         return (
-            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-red-500 space-y-6 p-8 text-center">
-                <AlertOctagon size={80} className="animate-pulse" />
-                <div>
-                    <h1 className="text-4xl font-bold mb-2 tracking-tighter">SYSTEM CRITICAL</h1>
-                    <p className="text-red-400/60 font-mono">CONNECTION TO MAINFRAME LOST. PROTOCOL SUSPENDED.</p>
+            <div className="min-h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center relative font-sans select-none">
+                
+                {/* Space Background Effects */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-black to-black"></div>
+                    {/* Stars */}
+                    {Array.from({length: 50}).map((_, i) => (
+                        <div key={i} className="absolute bg-white rounded-full opacity-0 animate-pulse" 
+                             style={{
+                                 top: `${Math.random() * 100}%`, 
+                                 left: `${Math.random() * 100}%`,
+                                 width: `${Math.random() * 2 + 1}px`,
+                                 height: `${Math.random() * 2 + 1}px`,
+                                 animationDuration: `${Math.random() * 3 + 2}s`
+                             }}
+                        ></div>
+                    ))}
                 </div>
-                <div className="max-w-md bg-red-900/10 border border-red-500/20 p-4 rounded text-sm font-mono text-left w-full">
-                    <p>{'>'} PING backend.c0f.lol... <span className="text-red-500">TIMEOUT</span></p>
-                    <p>{'>'} RETRY CONNECTION... <span className="text-red-500">FAILED</span></p>
-                    <p className="animate-pulse mt-2">{'>'} WAITING FOR RECOVERY_</p>
+
+                {/* Content */}
+                <div className="z-10 flex flex-col items-center text-center space-y-12">
+                    
+                    {/* Satellite Animation */}
+                    <div className="relative">
+                        {/* Earth */}
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-600 to-blue-900 shadow-[0_0_50px_rgba(37,99,235,0.3)] relative z-10 flex items-center justify-center border border-blue-500/20">
+                            <div className="w-full h-full opacity-50 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Western_Hemisphere_transparent_background.png/1200px-Earth_Western_Hemisphere_transparent_background.png')] bg-cover bg-center rounded-full"></div>
+                        </div>
+
+                        {/* Orbit Path */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-white/5 rounded-full z-0"></div>
+
+                        {/* Satellite */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] animate-spin-slow-reverse z-20 pointer-events-none">
+                             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4">
+                                <div className="relative">
+                                    <div className="absolute -inset-4 bg-red-500/20 rounded-full animate-ping"></div>
+                                    <AlertOctagon className="text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]" size={32} />
+                                </div>
+                             </div>
+                        </div>
+
+                        {/* Connection Line */}
+                        <div className="absolute top-1/2 left-1/2 w-0.5 h-24 bg-gradient-to-b from-red-500/0 via-red-500/50 to-blue-500/50 -translate-x-1/2 -translate-y-full origin-bottom rotate-45 opacity-20"></div>
+                    </div>
+
+                    <div className="space-y-4 max-w-md px-4">
+                        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                            Connection Lost
+                        </h1>
+                        <p className="text-red-400 font-mono text-sm uppercase tracking-widest border border-red-900/30 bg-red-500/5 py-2 px-4 rounded">
+                            Error trying to communicate to the backend
+                        </p>
+                    </div>
+
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        className="group relative px-8 py-3 bg-white text-black font-bold rounded hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                    >
+                        <span className="flex items-center gap-2">
+                            <RefreshCw className="group-hover:rotate-180 transition-transform duration-500" size={18} />
+                            RETRY CONNECTION
+                        </span>
+                    </button>
                 </div>
-                <button onClick={() => window.location.reload()} className="px-6 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-500 border border-red-500/50 rounded transition-colors uppercase font-bold tracking-widest text-sm">
-                    Retry Connection
-                </button>
             </div>
         );
     }
