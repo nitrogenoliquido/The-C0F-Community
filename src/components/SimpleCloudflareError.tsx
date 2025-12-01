@@ -22,17 +22,27 @@ export const SimpleCloudflareError = () => {
             <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
+            {/* Custom Animation Keyframes injected locally style tag for simplicity in this component */}
+            <style>{`
+                @keyframes data-flow {
+                    0% { left: -10%; opacity: 0; }
+                    10% { opacity: 1; }
+                    90% { opacity: 1; }
+                    100% { left: 100%; opacity: 0; }
+                }
+            `}</style>
+
             <div className="max-w-5xl w-full relative z-10">
                 {/* Header */}
                 <div className="flex flex-col items-center gap-2 mb-16">
-                    <div className="flex items-center gap-3 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono font-medium tracking-wider">
+                    <div className="flex items-center gap-3 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-mono font-bold tracking-widest uppercase">
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                         </span>
-                        SYSTEM CRITICAL
+                        ERROR WHILE TRYING TO CONNECT
                     </div>
-                    <h1 className="text-5xl font-medium text-zinc-100 tracking-tight mt-4">Web server is down</h1>
+                    <h1 className="text-5xl font-medium text-zinc-100 tracking-tight mt-4">Connection Failed</h1>
                 </div>
 
                 {/* Main Card */}
@@ -55,9 +65,10 @@ export const SimpleCloudflareError = () => {
                             </div>
                         </div>
 
-                        {/* Line 1 */}
-                        <div className="hidden md:flex flex-grow h-px bg-zinc-800 relative mx-4">
-                             <div className="absolute inset-0 bg-emerald-500/20 w-1/2 animate-[shimmer_2s_infinite_linear] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50"></div>
+                        {/* Line 1 (Green Flow) */}
+                        <div className="hidden md:flex flex-grow h-px bg-zinc-800 relative mx-4 overflow-hidden">
+                             {/* The travelling packet */}
+                             <div className="absolute top-0 h-full w-1/3 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" style={{ animation: 'data-flow 2s linear infinite' }}></div>
                         </div>
 
                         {/* Frontend Node */}
@@ -99,8 +110,8 @@ export const SimpleCloudflareError = () => {
                     {/* Technical Details */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-white/5 pt-8 mt-12">
                         <div className="space-y-4">
-                            <h2 className="text-xl font-medium text-white flex items-center gap-2">
-                                <span className="text-red-500 font-mono">521</span> 
+                            <h2 className="text-xl font-medium text-white flex items-center gap-3">
+                                <span className="text-red-500 font-mono font-bold text-2xl tracking-tighter">521</span> 
                                 Origin Down
                             </h2>
                             <p className="text-sm leading-relaxed text-zinc-500">
@@ -108,24 +119,19 @@ export const SimpleCloudflareError = () => {
                             </p>
                         </div>
                         
-                        <div className="bg-zinc-950/50 rounded-xl p-6 border border-white/5 flex flex-col justify-between">
+                        <div className="bg-zinc-950/50 rounded-xl p-6 border border-white/5 flex flex-col justify-between items-center text-center">
                             <div className="mb-4">
-                                <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Resolution Action</p>
-                                <p className="text-sm text-zinc-300">Wait for the administrator to restart the service.</p>
+                                <p className="text-sm text-zinc-300">
+                                    Click to reload or press <kbd className="bg-zinc-800 border border-zinc-700 px-1.5 py-0.5 rounded text-xs font-mono text-zinc-100 mx-1">R</kbd>
+                                </p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs text-zinc-600 font-mono">RETRY_STRATEGY: MANUAL</span>
-                                <button 
-                                    onClick={() => window.location.reload()}
-                                    className="group flex items-center gap-3 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-white/5 transition-all active:scale-95"
-                                >
-                                    <div className="w-6 h-6 rounded bg-black border border-zinc-600 flex items-center justify-center shadow-[0_2px_0_rgba(255,255,255,0.1)] group-active:translate-y-[1px] group-active:shadow-none transition-all">
-                                        <span className="text-[10px] font-bold text-zinc-300 font-mono">R</span>
-                                    </div>
-                                    <span className="text-xs font-medium text-white">Reload</span>
-                                    {isReloading && <RefreshCw size={12} className="animate-spin text-zinc-400" />}
-                                </button>
-                            </div>
+                            <button 
+                                onClick={() => window.location.reload()}
+                                className="group w-full flex items-center justify-center gap-3 px-4 py-3 bg-zinc-100 hover:bg-white text-black font-bold rounded-lg transition-all active:scale-[0.98] shadow-lg shadow-white/5"
+                            >
+                                {isReloading ? <RefreshCw size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+                                <span className="text-sm">Reload Page</span>
+                            </button>
                         </div>
                     </div>
                 </div>
