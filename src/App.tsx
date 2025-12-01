@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Bell, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { OfflineGame } from './components/OfflineGame';
+import { TerminalError } from './components/TerminalError';
 
 function Navbar() {
   const { username, logout, token } = useAuth();
@@ -95,7 +95,7 @@ function Navbar() {
 }
 
 function SystemGuard({ children }: { children: React.ReactNode }) {
-    console.log("SystemGuard v2 initialized - Hook Fix Applied");
+    console.log("SystemGuard v3 initialized - Terminal UI");
     const [status, setStatus] = useState<'CHECKING' | 'ONLINE' | 'OFFLINE'>('CHECKING');
 
     useEffect(() => {
@@ -120,7 +120,7 @@ function SystemGuard({ children }: { children: React.ReactNode }) {
     }
 
     if (status === 'OFFLINE') {
-        return <OfflineGame />;
+        return <TerminalError />;
     }
 
     return <>{children}</>;
