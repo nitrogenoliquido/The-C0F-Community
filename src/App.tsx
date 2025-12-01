@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Bell, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TerminalError } from './components/TerminalError';
+import { SimpleCloudflareError } from './components/SimpleCloudflareError';
 
 function Navbar() {
   const { username, logout, token } = useAuth();
@@ -95,7 +95,6 @@ function Navbar() {
 }
 
 function SystemGuard({ children }: { children: React.ReactNode }) {
-    console.log("SystemGuard v3 initialized - Terminal UI");
     const [status, setStatus] = useState<'CHECKING' | 'ONLINE' | 'OFFLINE'>('CHECKING');
 
     useEffect(() => {
@@ -120,7 +119,7 @@ function SystemGuard({ children }: { children: React.ReactNode }) {
     }
 
     if (status === 'OFFLINE') {
-        return <TerminalError />;
+        return <SimpleCloudflareError />;
     }
 
     return <>{children}</>;
