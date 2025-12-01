@@ -6,7 +6,7 @@ import CreatePostPage from './pages/CreatePostPage';
 import ThreadPage from './pages/ThreadPage';
 import CategoryPage from './pages/CategoryPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { Bell, AlertOctagon, RefreshCw } from 'lucide-react';
+import { Bell, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -117,72 +117,116 @@ function SystemGuard({ children }: { children: React.ReactNode }) {
         );
     }
 
+    // Snake Game Hook & Logic
+    const [snake, setSnake] = useState([[0,0], [1,0]]);
+    const [food, setFood] = useState([5,5]);
+    const [dir, setDir] = useState([1,0]);
+    const [gameOver, setGameOver] = useState(false);
+
+    useEffect(() => {
+        if (status !== 'OFFLINE') return;
+        
+        // Key Listener for 'R' and Game Controls
+        const handleKeys = (e: KeyboardEvent) => {
+            if (e.key.toLowerCase() === 'r') window.location.reload();
+            
+            // Snake Controls
+            switch(e.key) {
+                case 'ArrowUp': if(dir[1]===0) setDir([0,-1]); break;
+                case 'ArrowDown': if(dir[1]===0) setDir([0,1]); break;
+                case 'ArrowLeft': if(dir[0]===0) setDir([-1,0]); break;
+                case 'ArrowRight': if(dir[0]===0) setDir([1,0]); break;
+            }
+        };
+        window.addEventListener('keydown', handleKeys);
+        
+        // Game Loop
+        const moveSnake = () => {
+            if (gameOver) return;
+            setSnake(prev => {
+                const newHead = [prev[prev.length-1][0] + dir[0], prev[prev.length-1][1] + dir[1]];
+                // Wall Collision (Wrap around or Die - Let's wrap for endless fun)
+                if (newHead[0] >= 20) newHead[0] = 0;
+                if (newHead[0] < 0) newHead[0] = 19;
+                if (newHead[1] >= 20) newHead[1] = 0;
+                if (newHead[1] < 0) newHead[1] = 19;
+
+                // Self Collision
+                if (prev.some(s => s[0] === newHead[0] && s[1] === newHead[1])) {
+                    setGameOver(true);
+                    return prev;
+                }
+
+                const newSnake = [...prev, newHead];
+                if (newHead[0] === food[0] && newHead[1] === food[1]) {
+                    setFood([Math.floor(Math.random()*20), Math.floor(Math.random()*20)]);
+                } else {
+                    newSnake.shift();
+                }
+                return newSnake;
+            });
+        };
+
+        const gameInterval = setInterval(moveSnake, 100);
+        return () => {
+            window.removeEventListener('keydown', handleKeys);
+            clearInterval(gameInterval);
+        };
+    }, [status, dir, food, gameOver]);
+
     if (status === 'OFFLINE') {
         return (
-            <div className="min-h-screen bg-[#050505] overflow-hidden flex flex-col items-center justify-center relative font-sans select-none">
-                
-                {/* Space Background Effects */}
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-black to-black"></div>
-                    {/* Stars */}
-                    {Array.from({length: 50}).map((_, i) => (
-                        <div key={i} className="absolute bg-white rounded-full opacity-0 animate-pulse" 
-                             style={{
-                                 top: `${Math.random() * 100}%`, 
-                                 left: `${Math.random() * 100}%`,
-                                 width: `${Math.random() * 2 + 1}px`,
-                                 height: `${Math.random() * 2 + 1}px`,
-                                 animationDuration: `${Math.random() * 3 + 2}s`
-                             }}
-                        ></div>
-                    ))}
-                </div>
-
-                {/* Content */}
-                <div className="z-10 flex flex-col items-center text-center space-y-12">
-                    
-                    {/* Satellite Animation */}
-                    <div className="relative">
-                        {/* Earth */}
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-600 to-blue-900 shadow-[0_0_50px_rgba(37,99,235,0.3)] relative z-10 flex items-center justify-center border border-blue-500/20">
-                            <div className="w-full h-full opacity-50 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Western_Hemisphere_transparent_background.png/1200px-Earth_Western_Hemisphere_transparent_background.png')] bg-cover bg-center rounded-full"></div>
+            <div className="min-h-screen bg-[#111] text-[#d1d5db] font-sans flex flex-col items-center justify-center p-4">
+                <div className="max-w-2xl w-full space-y-8">
+                    {/* Header */}
+                    <div className="border-b border-white/10 pb-6">
+                        <h1 className="text-3xl font-light mb-2">Backend Connection Failed</h1>
+                        <div className="flex items-center gap-2 text-sm text-gray-500 font-mono">
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            Error 521: Web Server is Down
                         </div>
-
-                        {/* Orbit Path */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border border-white/5 rounded-full z-0"></div>
-
-                        {/* Satellite */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] animate-spin-slow-reverse z-20 pointer-events-none">
-                             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4">
-                                <div className="relative">
-                                    <div className="absolute -inset-4 bg-red-500/20 rounded-full animate-ping"></div>
-                                    <AlertOctagon className="text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]" size={32} />
-                                </div>
-                             </div>
-                        </div>
-
-                        {/* Connection Line */}
-                        <div className="absolute top-1/2 left-1/2 w-0.5 h-24 bg-gradient-to-b from-red-500/0 via-red-500/50 to-blue-500/50 -translate-x-1/2 -translate-y-full origin-bottom rotate-45 opacity-20"></div>
                     </div>
 
-                    <div className="space-y-4 max-w-md px-4">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                            Connection Lost
-                        </h1>
-                        <p className="text-red-400 font-mono text-sm uppercase tracking-widest border border-red-900/30 bg-red-500/5 py-2 px-4 rounded">
-                            Error trying to communicate to the backend
+                    {/* Main Info */}
+                    <div className="space-y-4">
+                        <p className="text-lg">
+                            The browser was able to connect to the frontend, but the backend API is unreachable.
+                        </p>
+                        <div className="bg-[#000] p-4 rounded border border-white/5 font-mono text-xs text-gray-400">
+                            <p>{'>'} GET https://backend.c0f.lol/api/public/status</p>
+                            <p className="text-red-400">{'>'} ERR_CONNECTION_TIMED_OUT</p>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                            Press <kbd className="bg-white/10 px-2 py-0.5 rounded text-white font-mono">R</kbd> to retry connection.
                         </p>
                     </div>
 
-                    <button 
-                        onClick={() => window.location.reload()} 
-                        className="group relative px-8 py-3 bg-white text-black font-bold rounded hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                    >
-                        <span className="flex items-center gap-2">
-                            <RefreshCw className="group-hover:rotate-180 transition-transform duration-500" size={18} />
-                            RETRY CONNECTION
-                        </span>
-                    </button>
+                    {/* Mini Game */}
+                    <div className="mt-12">
+                        <p className="text-xs text-center mb-2 text-gray-600 uppercase tracking-widest">Waiting Room • High Score: {snake.length - 2}</p>
+                        <div className="w-[300px] h-[300px] mx-auto bg-black border border-white/10 grid grid-cols-20 grid-rows-20 relative">
+                            {gameOver && (
+                                <div className="absolute inset-0 bg-black/80 flex items-center justify-center flex-col z-10">
+                                    <span className="text-red-500 font-bold mb-2">GAME OVER</span>
+                                    <button onClick={() => {setSnake([[0,0],[1,0]]); setGameOver(false);}} className="text-xs border border-white/20 px-2 py-1 hover:bg-white/10">Restart</button>
+                                </div>
+                            )}
+                            {/* Food */}
+                            <div className="bg-primary" style={{ gridColumn: food[0]+1, gridRow: food[1]+1 }}></div>
+                            {/* Snake */}
+                            {snake.map((s, i) => (
+                                <div key={i} className={`${i === snake.length-1 ? 'bg-white' : 'bg-gray-500'}`} style={{ gridColumn: s[0]+1, gridRow: s[1]+1 }}></div>
+                            ))}
+                        </div>
+                        <p className="text-[10px] text-center mt-2 text-gray-700">Use Arrow Keys to Play</p>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="pt-8 border-t border-white/5 flex justify-between text-[10px] text-gray-600 font-mono">
+                        <span>Ray ID: {Math.random().toString(36).substring(7).toUpperCase()}</span>
+                        <span>IP: Dynamic</span>
+                        <span>C0F Security Network</span>
+                    </div>
                 </div>
             </div>
         );
