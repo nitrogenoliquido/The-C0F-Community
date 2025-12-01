@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -63,21 +63,23 @@ function Navbar() {
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-background text-text font-sans selection:bg-primary/30">
-        <Navbar />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/create-post" element={<CreatePostPage />} />
-            <Route path="/thread/:postId" element={<ThreadPage />} />
-            <Route path="/category/:categoryName" element={<CategoryPage />} />
-          </Routes>
-        </main>
-      </div>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <div className="min-h-screen bg-background text-text font-sans selection:bg-primary/30">
+          <Navbar />
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/create-post" element={<CreatePostPage />} />
+              <Route path="/thread/:postId" element={<ThreadPage />} />
+              <Route path="/category/:categoryName" element={<CategoryPage />} />
+            </Routes>
+          </main>
+        </div>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
