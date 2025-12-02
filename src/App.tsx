@@ -6,15 +6,16 @@ import CreatePostPage from './pages/CreatePostPage';
 import ThreadPage from './pages/ThreadPage';
 import CategoryPage from './pages/CategoryPage';
 import UserProfilePage from './pages/UserProfilePage';
+import AdminPanelPage from './pages/AdminPanelPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import { Bell, RefreshCw } from 'lucide-react';
+import { Bell, RefreshCw, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SimpleCloudflareError } from './components/SimpleCloudflareError';
 
 function Navbar() {
-  const { username, logout, token } = useAuth();
+  const { username, role, logout, token } = useAuth();
   const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -59,6 +60,12 @@ function Navbar() {
               
               {username ? (
                 <>
+                  {role === 'ADMIN' && (
+                      <Link to="/admin" className="flex items-center gap-2 bg-red-500/10 border border-red-500/50 text-red-500 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-red-500 hover:text-white transition-all">
+                          <Lock size={12} /> Admin
+                      </Link>
+                  )}
+
                   <Link to="/create-post" className="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full text-sm font-medium hover:bg-primary/20 transition-all">
                     + New Post
                   </Link>
@@ -142,6 +149,7 @@ function App() {
                 <Route path="/create-post" element={<CreatePostPage />} />
                 <Route path="/thread/:postId" element={<ThreadPage />} />
                 <Route path="/user/:username" element={<UserProfilePage />} />
+                <Route path="/admin" element={<AdminPanelPage />} />
                 <Route path="/category/:categoryName" element={<CategoryPage />} />
                 <Route path="*" element={<NotFoundPage />} />
                 </Routes>
