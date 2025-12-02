@@ -77,7 +77,7 @@ export const SimpleCloudflareError = () => {
                              </div>
                             <div className="text-center">
                                 <div className="font-semibold text-zinc-200 text-sm">Frontend</div>
-                                <div className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold mt-0.5">Edge</div>
+                                <div className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold mt-0.5">WEBSITE</div>
                             </div>
                             <div className="absolute -bottom-6 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[9px] font-mono font-medium">
                                 WORKING
@@ -108,12 +108,12 @@ export const SimpleCloudflareError = () => {
 
                     {/* Technical Details */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-white/5 pt-6 mt-10">
-                        <div className="space-y-2 text-center md:text-left">
-                            <h2 className="text-lg font-medium text-white flex items-center justify-center md:justify-start gap-2">
+                        <div className="space-y-2 text-center flex flex-col justify-center">
+                            <h2 className="text-lg font-medium text-white flex items-center justify-center gap-2">
                                 <span className="text-red-500 font-mono font-bold text-xl tracking-tighter">521</span> 
                                 Origin Down
                             </h2>
-                            <p className="text-xs leading-relaxed text-zinc-500">
+                            <p className="text-xs leading-relaxed text-zinc-500 max-w-xs mx-auto">
                                 The origin server refused the connection. Usually indicates the server is offline or blocking requests.
                             </p>
                         </div>
